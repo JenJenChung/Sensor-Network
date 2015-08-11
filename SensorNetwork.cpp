@@ -182,9 +182,9 @@ void SensorNetwork::StateTransition()
 			allTargets[i].TargetTransition(currentOccupation) ;
 }
 
-void SensorNetwork::LogData()
+void SensorNetwork::LogData(string fileName)
 {
-	logFile.open(logFileName,ios_base::app) ;
+	logFile.open(fileName,ios_base::app) ;
 	logFile << itsStateID << "," ;
 	for (unsigned i = 0; i < jointAction.size(); i++)
 	{

@@ -3,12 +3,13 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include "string"
 #include "SensorNetwork.h"
 
 int main()
 {
 	// Default is 2 targets, 3 energy, 3 cells
-	SensorNetwork * testNetwork = new SensorNetwork(4,10,6) ;
+	SensorNetwork * testNetwork = new SensorNetwork() ;
 	
 	vector< vector<int> > allStates = testNetwork->GetAllStates() ;
 	
@@ -30,9 +31,11 @@ int main()
 	
 	cout << "Initialised state ID: " << testNetwork->GetStateID() << endl ;
 	
+	// Iterate for 1000 steps or until all targets are eliminated
+	std::string logFileName = "log.txt" ;
 	unsigned i = 0 ;
 	while (i < 1000){
-		testNetwork->Iterate() ;
+		testNetwork->Iterate(logFileName) ;
 		if (testNetwork->GetStateID() == 0)
 			break ;
 		i++ ;

@@ -19,7 +19,6 @@ class SensorNetwork
 			CalculateAllStates() ;
 			InitialiseTargets() ;
 			InitialiseSensors() ;
-			logFileName = "log.txt" ;
 		}
 		
 		SensorNetwork(int targets, int efull, int cells): numTargets(targets), targetEFull(efull), numCells(cells){
@@ -31,7 +30,6 @@ class SensorNetwork
 			CalculateAllStates() ;
 			InitialiseTargets() ;
 			InitialiseSensors() ;
-			logFileName = "log.txt" ;
 		}
 		
 		~SensorNetwork() {}
@@ -54,7 +52,7 @@ class SensorNetwork
 		
 		vector< vector<int> > GetAllStates() const {return allStates ;}
 		
-		void Iterate(){
+		void Iterate(string fileName){
 			ComputeGlobalReward() ;
 			cout << "Global reward: " << globalReward ;
 			StateTransition() ;
@@ -65,7 +63,7 @@ class SensorNetwork
 				allSensors[i].ChooseAction(itsStateID, newState) ;
 			}
 			itsStateID = newState ;
-			LogData() ;
+			LogData(fileName) ;
 		}
 		
 	private:
@@ -80,7 +78,6 @@ class SensorNetwork
 		vector<int> jointAction ;
 		int globalReward ;
 		ofstream logFile ;
-		string logFileName ;
 		
 		bool VectorComparison(vector<int> u, vector<int> v) ;
 		void CalculateAllStates() ;
@@ -89,5 +86,5 @@ class SensorNetwork
 		unsigned nChoosek( unsigned n, unsigned k ) ;
 		void ComputeGlobalReward() ;
 		void StateTransition() ;
-		void LogData() ;
+		void LogData(string fileName) ;
 } ;
