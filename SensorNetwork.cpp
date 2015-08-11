@@ -70,7 +70,8 @@ void SensorNetwork::InitialiseTargets(){
 	default_random_engine generator(seed) ;
 	uniform_int_distribution<int> distribution(1,numCells) ;
 	currentOccupation.SetNumCells(numCells) ;
-	for (int i = 0; i < numTargets; i++){
+	allTargets.clear() ;
+	for (int i = 0; i < totalTargets; i++){
 		while (true){
 			int cellID = distribution(generator) - 1 ;
 			if (!currentOccupation.occupied[cellID]){
@@ -192,4 +193,4 @@ void SensorNetwork::LogData(string fileName)
 	}
 	logFile << globalReward << "\n" ;
 	logFile.close() ;
-}
+} 

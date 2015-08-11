@@ -15,13 +15,13 @@ using namespace std ;
 class SensorNetwork
 {
 	public:
-		SensorNetwork(): numTargets(2), targetEFull(3), numCells(3) {
+		SensorNetwork(): numTargets(2), totalTargets(2), targetEFull(3), numCells(3) {
 			CalculateAllStates() ;
 			InitialiseTargets() ;
 			InitialiseSensors() ;
 		}
 		
-		SensorNetwork(int targets, int efull, int cells): numTargets(targets), targetEFull(efull), numCells(cells){
+		SensorNetwork(int targets, int efull, int cells): numTargets(targets), totalTargets(targets), targetEFull(efull), numCells(cells){
 			if (numTargets > numCells){
 				cout << "warning: number of targets must be less than or equal to number of cells. "
 				<< "Reducing number of targets to number of cells.\n" ;
@@ -60,14 +60,21 @@ class SensorNetwork
 			int newState = GetStateID() ;
 			for (unsigned i = 0; i < allSensors.size(); i++){
 				allSensors[i].SetReward(globalReward) ;
+			}
+			LogData(fileName) ;
+			itsStateID = newState ;
+			for (unsigned i = 0; i < allSensors.size(); i++){
 				allSensors[i].ChooseAction(itsStateID, newState) ;
 			}
-			itsStateID = newState ;
-			LogData(fileName) ;
+		}
+		
+		void ResetTargets(){
+			InitialiseTargets() ;
 		}
 		
 	private:
 		int numTargets ;
+		int totalTargets ;
 		int targetEFull ;
 		int numCells ;
 		vector< vector<int> > allStates ;

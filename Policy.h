@@ -2,6 +2,7 @@
 #include <vector>
 #include <random>
 #include <stdlib.h>
+#include <chrono>
 
 class Policy
 {
@@ -30,7 +31,8 @@ class Policy
 			
 			int newAction ;
 			int numActions = itsQ[0].size() ;
-			default_random_engine generator;
+			unsigned seed = std::chrono::system_clock::now().time_since_epoch().count() ;
+			default_random_engine generator(seed);
 			uniform_real_distribution<double> distribution(0.0,0.1);
 			double pAct = distribution(generator) ;
 			if (pAct <= eps)

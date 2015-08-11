@@ -13,6 +13,7 @@ class Cell
 		~Cell() {}
 		
 		void SetNumCells(int numCells){
+			occupied.clear() ;
 			for (int i = 0; i < numCells; i++)
 				occupied.push_back(false) ;
 		}

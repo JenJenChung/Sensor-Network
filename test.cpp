@@ -9,7 +9,7 @@
 int main()
 {
 	// Default is 2 targets, 3 energy, 3 cells
-	SensorNetwork * testNetwork = new SensorNetwork() ;
+	SensorNetwork * testNetwork = new SensorNetwork(2,6,5) ;
 	
 	vector< vector<int> > allStates = testNetwork->GetAllStates() ;
 	
@@ -31,14 +31,26 @@ int main()
 	
 	cout << "Initialised state ID: " << testNetwork->GetStateID() << endl ;
 	
-	// Iterate for 1000 steps or until all targets are eliminated
 	std::string logFileName = "log.txt" ;
-	unsigned i = 0 ;
-	while (i < 1000){
-		testNetwork->Iterate(logFileName) ;
-		if (testNetwork->GetStateID() == 0)
-			break ;
-		i++ ;
+	ofstream logFile ;
+	
+	unsigned k = 0 ;
+	unsigned nEps = 100 ;
+	while (k < nEps){
+		logFile.open(logFileName,ios_base::app) ;
+		logFile << "Episode " << k << endl ;
+		logFile.close() ;
+		
+		// Iterate for 1000 steps or until all targets are eliminated
+		unsigned i = 0 ;
+		while (i < 1000){
+			testNetwork->Iterate(logFileName) ;
+			if (testNetwork->GetStateID() == 0)
+				break ;
+			i++ ;
+		}
+		testNetwork->ResetTargets() ;
+		k++ ;
 	}
 	
 	return 0 ;
