@@ -10,7 +10,7 @@
 #include "Target.h"
 #include "Sensor.h"
 
-using namespace std ; 
+using namespace std ;
 
 class SensorNetwork
 {
@@ -33,6 +33,11 @@ class SensorNetwork
 		}
 		
 		~SensorNetwork() {}
+		
+		void SetLearningAlgorithm(LearningType algorithm){
+			for (unsigned i = 0; i < allSensors.size(); i++)
+				allSensors[i].SetLearning(algorithm) ;
+		}
 		
 		int GetStateID(vector<int> state){
 			for (unsigned i = 0; i < allStates.size(); i++){
@@ -70,6 +75,11 @@ class SensorNetwork
 		
 		void ResetTargets(){
 			InitialiseTargets() ;
+		}
+		
+		void ResetActionTrace(){
+			for (unsigned i = 0; i < allSensors.size(); i++)
+				allSensors[i].ResetTrace() ;
 		}
 		
 	private:

@@ -27,8 +27,16 @@ class Sensor
 		int GetLeft() const {return leftCell ;}
 		int GetRight() const {return rightCell ;}
 		
+		void SetLearning(LearningType algorithm){
+			itsPolicy.SetLearningType(algorithm) ;
+		}
+		
 		void InitialisePolicy(int numStates){
 			itsPolicy.SetQ(numStates, numActions) ;
+		}
+		
+		void ResetTrace(){
+			itsPolicy.SetTrace() ;
 		}
 		
 		void SetReward(int reward) {itsReward = reward ;}

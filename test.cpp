@@ -9,7 +9,9 @@
 int main()
 {
 	// Default is 2 targets, 3 energy, 3 cells
-	SensorNetwork * testNetwork = new SensorNetwork(4,10,5) ;
+	SensorNetwork * testNetwork = new SensorNetwork() ;
+	LearningType algorithm = SARSALAMBDA ;
+	testNetwork->SetLearningAlgorithm(algorithm) ;
 	
 	vector< vector<int> > allStates = testNetwork->GetAllStates() ;
 	
@@ -29,7 +31,7 @@ int main()
 	}
 	statesFile.close() ;
 	
-	std::string logFileName = "log3.txt" ;
+	std::string logFileName = "log.txt" ;
 	ofstream logFile ;
 	
 	unsigned k = 0 ;

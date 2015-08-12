@@ -4,21 +4,36 @@
 #include <stdlib.h>
 #include <chrono>
 
+enum LearningType {QLEARNING, SARSA, SARSALAMBDA} ;
+
 class Policy
 {
 	public:
-		Policy(): alpha(0.9), gamma(0.9), eps(0.01) {}
+		Policy(): alpha(0.9), gamma(0.9), eps(0.01), lambda(0.9), learning(QLEARNING) {}
 		~Policy() {}
 		
 		void SetQ(int numStates, int numActions){
 			vector< double > temp(numActions,0.0) ;
-			for (int i = 0; i < numStates; i++)
+			for (int i = 0; i < numStates; i++){
 				itsQ.push_back(temp) ;
+				itsTrace.push_back(temp) ;
+			}
 		}
+		
+		void SetTrace(){
+			itsTrace.clear() ;
+			int numStates = itsQ.size() ;
+			int numActions = itsQ[0].size() ;
+			vector< double > temp(numActions,0.0) ;
+			for (int i = 0; i < numStates; i++){
+				itsTrace.push_back(temp) ;
+			}
+		}
+		
+		void SetLearningType(LearningType algorithm) {learning = algorithm ;}
 		
 		int NextAction(int state0, int action, int reward, int state1){
 			itsReward = reward ;
-			itsQ[state0][action] = itsQ[state0][action] + alpha*(itsReward + gamma*GetMaxQ(state1) - itsQ[state0][action]) ;
 			
 			int tempMaxQ = itsQ[state1][0] ;
 			int tempAction = 0 ;
@@ -40,13 +55,42 @@ class Policy
 			else
 				newAction = tempAction ;
 			
+			double deltaQLearn = itsReward + gamma*GetMaxQ(state1) - itsQ[state0][action] ;
+			double deltaSARSA = itsReward + gamma*itsQ[state1][newAction] - itsQ[state0][action] ;
+			
+			switch (learning){
+				case QLEARNING:
+					// Q-learning
+					itsQ[state0][action] = itsQ[state0][action] + alpha*deltaQLearn ;
+					break ;
+				case SARSA:
+					// SARSA
+					itsQ[state0][action] = itsQ[state0][action] + alpha*deltaSARSA ;
+					break ;
+				case SARSALAMBDA:
+					// SARSA(lambda)
+					for (unsigned i = 0; i < itsTrace.size(); i++){
+						for (unsigned j = 0; j < itsTrace[i].size(); j++){
+							if (state0 == i && action == j)
+								itsTrace[i][j] = 1 ;
+							else
+								itsTrace[i][j] *= gamma*lambda ;
+							itsQ[i][j] = itsQ[i][j] + alpha*deltaSARSA*itsTrace[i][j] ;
+						}
+					}
+					break ;
+			}
+			
 			return newAction ;
 		}
 	private:
 		vector< vector<double> > itsQ ;
+		vector< vector<double> > itsTrace ;
 		double alpha ;
 		double gamma ;
 		double eps ;
+		double lambda ;
+		LearningType learning ;
 		double itsReward ;
 		
 		double GetMaxQ(int state){
