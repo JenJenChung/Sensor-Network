@@ -10,7 +10,7 @@
 #include "Target.h"
 #include "Sensor.h"
 
-using namespace std ;
+using namespace std ; 
 
 class SensorNetwork
 {
@@ -54,9 +54,9 @@ class SensorNetwork
 		
 		void Iterate(string fileName){
 			ComputeGlobalReward() ;
-			cout << "Global reward: " << globalReward ;
+//			cout << "Global reward: " << globalReward ;
 			StateTransition() ;
-			cout << ". Next state: " << GetStateID() << endl ;
+//			cout << ". Next state: " << GetStateID() << endl ;
 			int newState = GetStateID() ;
 			for (unsigned i = 0; i < allSensors.size(); i++){
 				allSensors[i].SetReward(globalReward) ;

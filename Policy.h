@@ -7,7 +7,7 @@
 class Policy
 {
 	public:
-		Policy(): alpha(0.9), gamma(0.9), eps(0.1) {}
+		Policy(): alpha(0.9), gamma(0.9), eps(0.01) {}
 		~Policy() {}
 		
 		void SetQ(int numStates, int numActions){

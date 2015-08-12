@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "Policy.h"
 
-enum SensorAction {TRACKLEFT, NOTRACK, TRACKRIGHT} ;
+enum SensorAction {TRACKLEFT, NOTRACK, TRACKRIGHT} ; 
 
 class Sensor
 {
