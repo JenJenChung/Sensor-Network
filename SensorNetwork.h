@@ -23,10 +23,19 @@ class SensorNetwork
 		
 		SensorNetwork(int targets, int efull, int cells): 
 		numTargets(targets), totalTargets(targets), targetEFull(efull), numCells(cells), isRanged(false){
+			if (targets < 0){
+				numTargets = 2 ;
+				totalTargets = 2 ;
+			}
+			if (efull < 0)
+				targetEFull = 3 ;
+			if (cells < 0)
+				numCells = 3 ;
 			if (numTargets > numCells){
-				cout << "warning: number of targets must be less than or equal to number of cells. "
-				<< "Reducing number of targets to number of cells.\n" ;
+				cout << "warning: number of targets must be less than or equal to number of cells.\n" ;
+				cout << "Reducing number of targets to number of cells.\n" ;
 				numTargets = numCells ;
+				totalTargets = numCells ;
 			}
 			CalculateAllStates() ;
 			InitialiseTargets() ;
@@ -35,14 +44,28 @@ class SensorNetwork
 		
 		SensorNetwork(int targets, int efull, int cells, int range): 
 		numTargets(targets), totalTargets(targets), targetEFull(efull), numCells(cells), isRanged(true){
+			if (targets < 0){
+				numTargets = 2 ;
+				totalTargets = 2 ;
+			}
+			if (efull < 0)
+				targetEFull = 3 ;
+			if (cells < 0)
+				numCells = 3 ;
 			if (numTargets > numCells){
-				cout << "warning: number of targets must be less than or equal to number of cells. "
-				<< "Reducing number of targets to number of cells.\n" ;
+				cout << "warning: number of targets must be less than or equal to number of cells.\n" ;
+				cout << "Reducing number of targets to number of cells.\n" ;
 				numTargets = numCells ;
+				totalTargets = numCells ;
 			}
 			CalculateAllStates() ;
 			InitialiseTargets() ;
-			InitialiseSensors(range) ;
+			if (range < 0){
+				isRanged = false ;
+				InitialiseSensors() ;
+			}
+			else
+				InitialiseSensors(range) ;
 		}
 		
 		~SensorNetwork() {}
