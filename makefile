@@ -10,5 +10,5 @@ Test : $(OBJS)
 test.o : test.cpp SensorNetwork.h
 	$(CC) $(CFLAGS) test.cpp
 
-SensorNetwork.o : SensorNetwork.h SensorNetwork.cpp Target.h Sensor.h
+SensorNetwork.o : SensorNetwork.h SensorNetwork.cpp Target.h Sensor.h Policy.h
 	$(CC) $(CFLAGS) SensorNetwork.cpp
