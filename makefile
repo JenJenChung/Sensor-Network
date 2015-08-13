@@ -12,3 +12,6 @@ test.o : test.cpp SensorNetwork.h
 
 SensorNetwork.o : SensorNetwork.h SensorNetwork.cpp Target.h Sensor.h
 	$(CC) $(CFLAGS) SensorNetwork.cpp
+
+Sensor.o : Sensor.h Sensor.cpp Policy.h
+	$(CC) $(CFLAGS) Sensor.cpp

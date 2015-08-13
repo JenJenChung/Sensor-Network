@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include <stdlib.h>
 #include "Policy.h"
 
@@ -31,8 +32,29 @@ class Sensor
 			itsPolicy.SetLearningType(algorithm) ;
 		}
 		
-		void InitialisePolicy(int numStates){
+		void SetRange(int range, vector< vector<int> > allStates){
+			itsRange = range ;
+			vector<int> temp ;
+			for (unsigned i = 0; i < allStates.size(); i++){
+				temp.clear() ;
+				for (int j = 0; j < range*2; j++)
+					temp.push_back(allStates[i][j]) ;
+				
+				bool newState = true ;
+				for (unsigned j = 0; j < itsStates.size(); j++)
+					if (VectorCompare(temp,itsStates[j]))
+						newState = false ;
+				if (newState)
+					itsStates.push_back(temp) ;
+			}
+		}
+		
+		void InitialisePolicy(){
 			itsPolicy.SetQ(numStates, numActions) ;
+		}
+		
+		void InitialisePolicy(int nStates){
+			itsPolicy.SetQ(nStates, numActions) ;
 		}
 		
 		void ResetTrace(){
@@ -40,6 +62,23 @@ class Sensor
 		}
 		
 		void SetReward(int reward) {itsReward = reward ;}
+		
+		void ChooseAction(vector<int> gState0, vector<int> gState1){
+			int state0 = ObserveLocalState(gState0) ;
+			int state1 = ObserveLocalState(gState1) ;
+			int newAction = itsPolicy.NextAction(state0, itsAction, itsReward, state1) ;
+			switch (newAction){
+				case 0:
+					itsAction = TRACKLEFT ;
+					break ;
+				case 1:
+					itsAction = NOTRACK ;
+					break ;
+				case 2:
+					itsAction = TRACKRIGHT ;
+					break ;
+			}
+		}
 		
 		void ChooseAction(int state0, int state1){
 			int newAction = itsPolicy.NextAction(state0, itsAction, itsReward, state1) ;
@@ -63,4 +102,10 @@ class Sensor
 		SensorAction itsAction ;
 		int itsReward ;
 		Policy itsPolicy ;
+		int itsRange ;
+		vector< vector<int> > itsStates ;
+		int numStates ;
+		
+		int ObserveLocalState(vector<int> globalState) ;
+		bool VectorCompare(vector<int> u, vector<int> v) ;
 } ;

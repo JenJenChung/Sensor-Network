@@ -6,6 +6,8 @@
 #include <string>
 #include "SensorNetwork.h"
 
+// LearningType {QLEARNING, SARSA, SARSALAMBDA} ;
+
 int main()
 {
 	// Default is 2 targets, 3 energy, 3 cells

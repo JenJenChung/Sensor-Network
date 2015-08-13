@@ -39,6 +39,11 @@ class SensorNetwork
 				allSensors[i].SetLearning(algorithm) ;
 		}
 		
+		void SetSensorRange(int range){
+			for (unsigned i = 0; i < allSensors.size(); i++)
+				allSensors[i].SetRange(range, allStates) ;
+		}
+		
 		int GetStateID(vector<int> state){
 			for (unsigned i = 0; i < allStates.size(); i++){
 				if (VectorComparison(allStates[i],state))
@@ -59,18 +64,17 @@ class SensorNetwork
 		
 		void Iterate(string fileName){
 			ComputeGlobalReward() ;
-//			cout << "Global reward: " << globalReward ;
 			StateTransition() ;
-//			cout << ". Next state: " << GetStateID() << endl ;
 			int newState = GetStateID() ;
 			for (unsigned i = 0; i < allSensors.size(); i++){
 				allSensors[i].SetReward(globalReward) ;
 			}
 			LogData(fileName) ;
-			itsStateID = newState ;
 			for (unsigned i = 0; i < allSensors.size(); i++){
+//				allSensors[i].ChooseAction(allStates[itsStateID], allStates[newState]) ;
 				allSensors[i].ChooseAction(itsStateID, newState) ;
 			}
+			itsStateID = newState ;
 		}
 		
 		void ResetTargets(){
