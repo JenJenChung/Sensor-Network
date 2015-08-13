@@ -63,7 +63,7 @@ class Target
 					break ;
 				case 2:
 					itsAction = RIGHT ;
-					newState = min(itsState+1,(int)AllCells.occupied.size()) ;
+					newState = min(itsState+1,(int)AllCells.occupied.size()-1) ;
 					if (!AllCells.occupied[newState]){ // make transition
 						AllCells.ToggleOccupied(itsState) ;
 						itsState = newState ;
