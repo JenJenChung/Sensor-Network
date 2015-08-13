@@ -10,8 +10,8 @@
 
 int main()
 {
-	// Default is 2 targets, 3 energy, 3 cells
-	SensorNetwork * testNetwork = new SensorNetwork() ;
+	// Default is 2 targets, 3 energy, 3 cells, full state observability (i.e. can observe all cells on either side)
+	SensorNetwork * testNetwork = new SensorNetwork(3,10,4,1) ;
 	LearningType algorithm = SARSALAMBDA ;
 	testNetwork->SetLearningAlgorithm(algorithm) ;
 	
@@ -37,7 +37,7 @@ int main()
 	ofstream logFile ;
 	
 	unsigned k = 0 ;
-	unsigned nEps = 1000 ;
+	unsigned nEps = 10 ;
 	while (k < nEps){
 		logFile.open(logFileName,ios_base::app) ;
 		logFile << "Episode " << k << endl ;

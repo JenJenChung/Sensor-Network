@@ -15,13 +15,14 @@ using namespace std ;
 class SensorNetwork
 {
 	public:
-		SensorNetwork(): numTargets(2), totalTargets(2), targetEFull(3), numCells(3) {
+		SensorNetwork(): numTargets(2), totalTargets(2), targetEFull(3), numCells(3), isRanged(false) {
 			CalculateAllStates() ;
 			InitialiseTargets() ;
 			InitialiseSensors() ;
 		}
 		
-		SensorNetwork(int targets, int efull, int cells): numTargets(targets), totalTargets(targets), targetEFull(efull), numCells(cells){
+		SensorNetwork(int targets, int efull, int cells): 
+		numTargets(targets), totalTargets(targets), targetEFull(efull), numCells(cells), isRanged(false){
 			if (numTargets > numCells){
 				cout << "warning: number of targets must be less than or equal to number of cells. "
 				<< "Reducing number of targets to number of cells.\n" ;
@@ -30,6 +31,18 @@ class SensorNetwork
 			CalculateAllStates() ;
 			InitialiseTargets() ;
 			InitialiseSensors() ;
+		}
+		
+		SensorNetwork(int targets, int efull, int cells, int range): 
+		numTargets(targets), totalTargets(targets), targetEFull(efull), numCells(cells), isRanged(true){
+			if (numTargets > numCells){
+				cout << "warning: number of targets must be less than or equal to number of cells. "
+				<< "Reducing number of targets to number of cells.\n" ;
+				numTargets = numCells ;
+			}
+			CalculateAllStates() ;
+			InitialiseTargets() ;
+			InitialiseSensors(range) ;
 		}
 		
 		~SensorNetwork() {}
@@ -71,8 +84,10 @@ class SensorNetwork
 			}
 			LogData(fileName) ;
 			for (unsigned i = 0; i < allSensors.size(); i++){
-//				allSensors[i].ChooseAction(allStates[itsStateID], allStates[newState]) ;
-				allSensors[i].ChooseAction(itsStateID, newState) ;
+				if (isRanged)
+					allSensors[i].ChooseAction(allStates[itsStateID], allStates[newState]) ;
+				else
+					allSensors[i].ChooseAction(itsStateID, newState) ;
 			}
 			itsStateID = newState ;
 		}
@@ -99,11 +114,13 @@ class SensorNetwork
 		vector<int> jointAction ;
 		int globalReward ;
 		ofstream logFile ;
+		bool isRanged ;
 		
 		bool VectorComparison(vector<int> u, vector<int> v) ;
 		void CalculateAllStates() ;
 		void InitialiseTargets() ;
 		void InitialiseSensors() ;
+		void InitialiseSensors(int range) ;
 		unsigned nChoosek( unsigned n, unsigned k ) ;
 		void ComputeGlobalReward() ;
 		void StateTransition() ;

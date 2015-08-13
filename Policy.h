@@ -71,7 +71,7 @@ class Policy
 					// SARSA(lambda)
 					for (unsigned i = 0; i < itsTrace.size(); i++){
 						for (unsigned j = 0; j < itsTrace[i].size(); j++){
-							if (state0 == i && action == j)
+							if (state0 == (int)i && action == (int)j)
 								itsTrace[i][j] = 1 ;
 							else
 								itsTrace[i][j] *= gamma*lambda ;

@@ -34,19 +34,25 @@ class Sensor
 		
 		void SetRange(int range, vector< vector<int> > allStates){
 			itsRange = range ;
+			int numCells = allStates[0].size() ;
+			int leftLim = max(0, leftCell - itsRange + 1) ;
+			int rightLim = min(numCells, rightCell + itsRange - 1) ;
+			int nCells = rightLim - leftLim ;
 			vector<int> temp ;
 			for (unsigned i = 0; i < allStates.size(); i++){
 				temp.clear() ;
-				for (int j = 0; j < range*2; j++)
+				for (int j = 0; j <= nCells; j++)
 					temp.push_back(allStates[i][j]) ;
 				
 				bool newState = true ;
-				for (unsigned j = 0; j < itsStates.size(); j++)
+				for (unsigned j = 0; j < itsStates.size(); j++){
 					if (VectorCompare(temp,itsStates[j]))
 						newState = false ;
+				}
 				if (newState)
 					itsStates.push_back(temp) ;
 			}
+			numStates = itsStates.size() ;
 		}
 		
 		void InitialisePolicy(){
@@ -106,6 +112,32 @@ class Sensor
 		vector< vector<int> > itsStates ;
 		int numStates ;
 		
-		int ObserveLocalState(vector<int> globalState) ;
-		bool VectorCompare(vector<int> u, vector<int> v) ;
+		int ObserveLocalState(vector<int> globalState){
+			int numCells = globalState.size() ;
+			int leftLim = leftCell - itsRange + 1 ;
+			int rightLim = rightCell + itsRange - 1 ;
+			vector<int> temp ;
+			for (int i = leftLim; i <= rightLim; i++){
+				if (i >= 0 && i < numCells)
+					temp.push_back(globalState[i]) ;
+			}
+	
+			for (unsigned i = 0; i < itsStates.size(); i++)
+				if (VectorCompare(temp, itsStates[i]))
+					return i ;
+	
+			cout << "Error: invalid state!\n" ;
+			return -1 ;
+		}
+		
+		bool VectorCompare(vector<int> u, vector<int> v){
+			bool eq = true ;
+			for (unsigned i = 0; i < u.size(); i++){
+				if (u[i] != v[i]){
+					eq = false ;
+					break ;
+				}
+			}
+			return eq ;
+		}
 } ;

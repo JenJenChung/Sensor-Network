@@ -112,6 +112,30 @@ void SensorNetwork::InitialiseSensors(){
 //	sensorsFile.close() ;
 }
 
+void SensorNetwork::InitialiseSensors(int range){
+	int numSensors = 2*(numCells + 1) ;
+	for (int i = 0; i < numSensors; i++){
+		if (i/2 == 0){
+			Sensor newSensor(0,0) ;
+			newSensor.SetRange(range, allStates) ;
+			newSensor.InitialisePolicy() ;
+			allSensors.push_back(newSensor) ;
+		}
+		else if (i/2 == numCells){
+			Sensor newSensor(numCells-1,numCells-1) ;
+			newSensor.SetRange(range, allStates) ;
+			newSensor.InitialisePolicy() ;
+			allSensors.push_back(newSensor) ;
+		}
+		else {
+			Sensor newSensor(i/2-1,(i/2)) ;
+			newSensor.SetRange(range, allStates) ;
+			newSensor.InitialisePolicy() ;
+			allSensors.push_back(newSensor) ;
+		}
+	}
+}
+
 unsigned SensorNetwork::nChoosek( unsigned n, unsigned k )
 {
     if (k > n) return 0;
