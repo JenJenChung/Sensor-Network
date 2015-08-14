@@ -12,6 +12,7 @@ class Policy
 		Policy(): alpha(0.9), gamma(0.9), eps(0.01), lambda(0.9), learning(QLEARNING) {}
 		~Policy() {}
 		
+		// Initialise state-action value table to zeros
 		void SetQ(int numStates, int numActions){
 			vector< double > temp(numActions,0.0) ;
 			for (int i = 0; i < numStates; i++){
@@ -20,6 +21,7 @@ class Policy
 			}
 		}
 		
+		// Initialise state-action trace to zeros
 		void SetTrace(){
 			itsTrace.clear() ;
 			int numStates = itsQ.size() ;
@@ -32,9 +34,11 @@ class Policy
 		
 		void SetLearningType(LearningType algorithm) {learning = algorithm ;}
 		
+		// Select the next action based on the assigned learning algorithm
 		int NextAction(int state0, int action, int reward, int state1){
 			itsReward = reward ;
 			
+			// Compute the next best action
 			int tempMaxQ = itsQ[state1][0] ;
 			int tempAction = 0 ;
 			for (unsigned i = 0; i < itsQ[state1].size(); i++){
@@ -44,20 +48,23 @@ class Policy
 				}
 			}
 			
+			// Epsilon greedy exploration
 			int newAction ;
 			int numActions = itsQ[0].size() ;
 			unsigned seed = std::chrono::system_clock::now().time_since_epoch().count() ;
 			default_random_engine generator(seed);
-			uniform_real_distribution<double> distribution(0.0,0.1);
+			uniform_real_distribution<double> distribution(0.0,1.0);
 			double pAct = distribution(generator) ;
 			if (pAct <= eps)
 				newAction = rand() % numActions ;
 			else
 				newAction = tempAction ;
 			
+			// Calculate temporal difference
 			double deltaQLearn = itsReward + gamma*GetMaxQ(state1) - itsQ[state0][action] ;
 			double deltaSARSA = itsReward + gamma*itsQ[state1][newAction] - itsQ[state0][action] ;
 			
+			// Learning backup
 			switch (learning){
 				case QLEARNING:
 					// Q-learning
@@ -93,6 +100,7 @@ class Policy
 		LearningType learning ;
 		double itsReward ;
 		
+		// Return the maximum Q-value for the given state
 		double GetMaxQ(int state){
 			double maxQ = itsQ[state][0] ;
 			for (unsigned i = 0; i < itsQ[state].size(); i++){

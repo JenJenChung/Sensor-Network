@@ -12,12 +12,14 @@ class Cell
 		Cell() {}
 		~Cell() {}
 		
+		// Initialise domain with empty cells
 		void SetNumCells(int numCells){
 			occupied.clear() ;
 			for (int i = 0; i < numCells; i++)
 				occupied.push_back(false) ;
 		}
 		
+		// Change the occupancy state of the cell
 		void ToggleOccupied(int State){
 			occupied[State] = !occupied[State] ;
 		}
@@ -28,23 +30,13 @@ class Cell
 class Target
 {
 	public:
-		Target(int state, int eState): cdfActions(3), itsState(state), itsEnergy(eState) {
-			for (int i = 0; i < cdfActions; i++)
-				itsTransition.push_back((double) (i+1) / (double) cdfActions) ;
-		}
+		Target(int state, int eState): numActions(3), itsState(state), itsEnergy(eState) {}
+		
 		~Target() {}
 		
+		// Perform target state transition
 		void TargetTransition(Cell & AllCells){
-			default_random_engine generator;
-			uniform_real_distribution<double> distribution(1,100);
-			double pTrans = distribution(generator) / 100.0 ;
-			int temp ;
-			for (int i = 0; i < cdfActions; i++){
-				if (pTrans <= itsTransition[i]){
-					temp = i ;
-					break ;
-				}
-			}
+			int temp = rand() % numActions ;
 	
 			// Only make transition if transition cell is not occupied
 			int newState ;
@@ -70,14 +62,14 @@ class Target
 						AllCells.ToggleOccupied(itsState) ;
 					}
 					break ;
-			}	
+			}
 		}
 		
 		void ReduceEnergy() {itsEnergy-- ;}
 		int GetState() {return itsState ;}
 		int GetEnergy() {return itsEnergy ;}
 	private:
-		int cdfActions ;
+		int numActions ;
 		int itsState ;
 		int itsEnergy ;
 		vector<double> itsTransition ;

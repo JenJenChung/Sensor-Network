@@ -9,6 +9,7 @@ class Sensor
 {
 	public:
 		Sensor(int left, int right): leftCell(left), rightCell(right), numActions(3) {
+			// Assign random initial action
 			int a0 = rand() % numActions ;
 			switch (a0) {
 				case 0:
@@ -22,16 +23,19 @@ class Sensor
 					break ;
 			}
 		}
+		
 		~Sensor() {}
 		
 		int GetAction() const {return itsAction ;}
 		int GetLeft() const {return leftCell ;}
 		int GetRight() const {return rightCell ;}
 		
+		// Assign learning algorithm
 		void SetLearning(LearningType algorithm){
 			itsPolicy.SetLearningType(algorithm) ;
 		}
 		
+		// Compute complete local state space given sensor observability range
 		void SetRange(int range, vector< vector<int> > allStates){
 			itsRange = range ;
 			int numCells = allStates[0].size() ;
@@ -55,20 +59,24 @@ class Sensor
 			numStates = itsStates.size() ;
 		}
 		
+		// Initialise decentralised learning algorithm based on local state space
 		void InitialisePolicy(){
 			itsPolicy.SetQ(numStates, numActions) ;
 		}
 		
+		// Initialise centralised learning algorithm based on global state space
 		void InitialisePolicy(int nStates){
 			itsPolicy.SetQ(nStates, numActions) ;
 		}
 		
+		// Reset state-action trace to zeros
 		void ResetTrace(){
 			itsPolicy.SetTrace() ;
 		}
 		
 		void SetReward(int reward) {itsReward = reward ;}
 		
+		// Choose next action based on policy learned on local state
 		void ChooseAction(vector<int> gState0, vector<int> gState1){
 			int state0 = ObserveLocalState(gState0) ;
 			int state1 = ObserveLocalState(gState1) ;
@@ -86,6 +94,7 @@ class Sensor
 			}
 		}
 		
+		// Choose next action based on policy learned on global state
 		void ChooseAction(int state0, int state1){
 			int newAction = itsPolicy.NextAction(state0, itsAction, itsReward, state1) ;
 			switch (newAction){
@@ -112,6 +121,7 @@ class Sensor
 		vector< vector<int> > itsStates ;
 		int numStates ;
 		
+		// Compute local state given global state
 		int ObserveLocalState(vector<int> globalState){
 			int numCells = globalState.size() ;
 			int leftLim = leftCell - itsRange + 1 ;
@@ -130,6 +140,7 @@ class Sensor
 			return -1 ;
 		}
 		
+		// Return true if input vectors have identical elements
 		bool VectorCompare(vector<int> u, vector<int> v){
 			bool eq = true ;
 			for (unsigned i = 0; i < u.size(); i++){

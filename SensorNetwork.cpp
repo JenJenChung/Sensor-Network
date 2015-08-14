@@ -1,5 +1,6 @@
 #include "SensorNetwork.h"
 
+// Return true if input vectors have identical elements, false otherwise
 bool SensorNetwork::VectorComparison(vector<int> u, vector<int> v){
 	bool eq = true ;
 	for (unsigned i = 0; i < u.size(); i++){
@@ -11,6 +12,7 @@ bool SensorNetwork::VectorComparison(vector<int> u, vector<int> v){
 	return eq ;
 }
 
+// Compute and record complete discrete state space
 void SensorNetwork::CalculateAllStates(){
 	vector<int> cells(numCells,0) ;
 	vector< vector<int> > tempStates((int)pow(2,numCells),cells) ;
@@ -65,6 +67,7 @@ void SensorNetwork::CalculateAllStates(){
 	}
 }
 
+// Set random target configuration with full energy
 void SensorNetwork::InitialiseTargets(){
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count() ;
 	default_random_engine generator(seed) ;
@@ -85,6 +88,7 @@ void SensorNetwork::InitialiseTargets(){
 	itsStateID = GetStateID() ;
 }
 
+// Centralised sensor network share the global state vector
 void SensorNetwork::InitialiseSensors(){
 	int numSensors = 2*(numCells + 1) ;
 	for (int i = 0; i < numSensors; i++){
@@ -112,6 +116,7 @@ void SensorNetwork::InitialiseSensors(){
 //	sensorsFile.close() ;
 }
 
+// Decentralised sensor network with local state vectors
 void SensorNetwork::InitialiseSensors(int range){
 	int numSensors = 2*(numCells + 1) ;
 	for (int i = 0; i < numSensors; i++){
@@ -136,6 +141,7 @@ void SensorNetwork::InitialiseSensors(int range){
 	}
 }
 
+// Compute combinatorial for determining state space size
 unsigned SensorNetwork::nChoosek( unsigned n, unsigned k )
 {
     if (k > n) return 0;
@@ -150,6 +156,7 @@ unsigned SensorNetwork::nChoosek( unsigned n, unsigned k )
     return result;
 }
 
+// Compute global reward: -1 for each sensing action, +30 for each removed target
 void SensorNetwork::ComputeGlobalReward()
 {
 	vector<int> tracked(numCells,0) ;
@@ -200,6 +207,7 @@ void SensorNetwork::ComputeGlobalReward()
 	numTargets = allTargets.size() ;
 }
 
+// Initiate target transition
 void SensorNetwork::StateTransition()
 {
 	for (int i = 0; i < numTargets; i++)
@@ -207,6 +215,7 @@ void SensorNetwork::StateTransition()
 			allTargets[i].TargetTransition(currentOccupation) ;
 }
 
+// Log learning step data
 void SensorNetwork::LogData(string fileName)
 {
 	logFile.open(fileName,ios_base::app) ;

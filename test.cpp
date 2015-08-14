@@ -11,9 +11,9 @@
 int main()
 {
 	// Domain parameters, note: any negative inputs will apply the default values
-	int numTargets = 4 ;		// number of targets, default 2
-	int fullEnergy = 5 ;		// initial target energy, default 3
-	int numCells = 3 ;			// number of cells, default 3
+	int numTargets = -4 ;		// number of targets, default 2
+	int fullEnergy = -5 ;		// initial target energy, default 3
+	int numCells = -5 ;			// number of cells, default 3
 	int obsRange = -1 ;			// number of cells on either side of sensor that are observable, default full
 	
 	SensorNetwork * testNetwork = new SensorNetwork(numTargets, fullEnergy, numCells, obsRange) ;
@@ -38,9 +38,11 @@ int main()
 	}
 	statesFile.close() ;
 	
+	// Initialise log file
 	std::string logFileName = "log.txt" ;
 	ofstream logFile ;
 	
+	// Iterate through each episode
 	unsigned k = 0 ;
 	unsigned nEps = 100 ;
 	while (k < nEps){
