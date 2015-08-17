@@ -7,7 +7,7 @@ LFLAGS = -Wall $(DEBUG)
 Test : $(OBJS)
 	$(CC) $(LFLAGS) $(OBJS) -o Test
 
-test.o : test.cpp SensorNetwork.h
+test.o : test.cpp SensorNetwork.h Target.h Sensor.h Policy.h
 	$(CC) $(CFLAGS) test.cpp
 
 SensorNetwork.o : SensorNetwork.h SensorNetwork.cpp Target.h Sensor.h Policy.h

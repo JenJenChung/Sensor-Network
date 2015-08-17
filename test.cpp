@@ -11,13 +11,13 @@
 int main()
 {
 	// Domain parameters, note: any negative inputs will apply the default values
-	int numTargets = -4 ;		// number of targets, default 2
-	int fullEnergy = -5 ;		// initial target energy, default 3
-	int numCells = -5 ;			// number of cells, default 3
-	int obsRange = -1 ;			// number of cells on either side of sensor that are observable, default full
+	int numTargets = 3 ;		// number of targets, default 2
+	int fullEnergy = 5 ;		// initial target energy, default 3
+	int numCells = 5 ;			// number of cells, default 3
+	int obsRange = 1 ;			// number of cells on either side of sensor that are observable, default full
 	
 	SensorNetwork * testNetwork = new SensorNetwork(numTargets, fullEnergy, numCells, obsRange) ;
-	LearningType algorithm = SARSALAMBDA ;
+	LearningType algorithm = QLEARNING ;
 	testNetwork->SetLearningAlgorithm(algorithm) ;
 	
 	vector< vector<int> > allStates = testNetwork->GetAllStates() ;
@@ -62,7 +62,7 @@ int main()
 		}
 		
 		cout << i << " steps.\n" ;
-		
+		 
 		testNetwork->ResetTargets() ;
 		k++ ;
 	}

@@ -20,8 +20,8 @@ class Cell
 		}
 		
 		// Change the occupancy state of the cell
-		void ToggleOccupied(int State){
-			occupied[State] = !occupied[State] ;
+		void ToggleOccupied(int state){
+			occupied[state] = !occupied[state] ;
 		}
 		
 		vector<bool> occupied ;

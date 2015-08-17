@@ -196,6 +196,8 @@ void SensorNetwork::ComputeGlobalReward()
 			allTargets[i].ReduceEnergy() ;
 		if (allTargets[i].GetEnergy() > 0)
 			temp.push_back(allTargets[i]) ;
+		else
+			currentOccupation.ToggleOccupied(allTargets[i].GetState()) ;
 	}
 	
 	// Identify and remove 0 energy targets
